@@ -150,19 +150,22 @@ networks:
 ### Tip 1: Use DietPi
 If you will be doing this on a Raspberry Pi, I highly suggest you use [DietPi](https://dietpi.com/). It is a really solid and powerful yet minimal and efficient linux image which gets the most out of your RBPi. For context, I can currently run 2 - 3 simultaneous websites on a RBPi 3B+ (1GB RAM) which experience really low traffic before actually maxing out the RAM. So for small personal projects / blogs it is okay. A RBPi 4 with 4 - 8 GB RAM memory should perform much better.
 
-### Tip 2: If you need to perform any changes to any of your docker-compose.yml files, modify it and then rebuild it and launch it with:
+### Tip 2: Modifying docker-compose.yml files
+If you need to perform any changes to any of your docker-compose.yml files, modify it and then rebuild it and launch it with:
 ```
 sudo docker-compose up -d --build --force-recreate --no-deps --remove-orphans
 ```
 
-### Tip 3: To launch multiple wordpress websites in a non Raspberry Pi 64 bit (arm64v8) system, modify the docker-compose file for each website uncommenting the desired system in:
+### Tip 3: Other architectures
+To launch multiple wordpress websites in a non Raspberry Pi 64 bit (arm64v8) system, modify the docker-compose file for each website uncommenting the desired system in:
 ```
 #image: arm64v8/wordpress:latest
 #image: arm32v7/wordpress:latest
 #image: wordpress:latest
 ```
 
-### Tip 4: Last but not least, installing wordpress this way makes it very easy for you to migrate your wordpress websites to another host/machine. Simply copy the files (stop the containers before) from the current install usually located in  "/var/lib/docker" (you can verify with Portainer) to the same directory on the new host machine and then proceed to repeat the steps above. If everything went well you should have your wordpress sites with everything as you left them.
+### Tip 4: Moving containers and volumes
+Last but not least, installing wordpress this way makes it very easy for you to migrate your wordpress websites to another host/machine. Simply copy the files (stop the containers before) from the current install usually located in  "/var/lib/docker" (you can verify with Portainer) to the same directory on the new host machine and then proceed to repeat the steps above. If everything went well you should have your wordpress sites with everything as you left them.
 
 ---
 
