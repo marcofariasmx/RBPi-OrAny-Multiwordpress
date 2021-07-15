@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  db_node_domain_websiteN:
+    #image: mariadb:latest
+    image: mariadb:10.5.11
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: yourPASSWORD
+      MYSQL_DATABASE: websiteN-wp-db
+      MYSQL_USER: websiteN-wp-db-user
+      MYSQL_PASSWORD: yourPASSWORD
+    container_name: websiteN-wordpress-db
+
+  wordpress_websiteN:
+    depends_on:
+      - db_node_domain_websiteN
+    #image: arm64v8/wordpress:latest
+    #image: arm32v7/wordpress:latest
+    #image: wordpress:latest
+    image: arm64v8/wordpress:php7.4
+    volumes:
+      - wp_data:/var/www/html
+    expose:
+      - 80
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: websiteN.com, www.websiteN.com
+      LETSENCRYPT_HOST: websiteN.com, www.websiteN.com
+      WORDPRESS_DB_HOST: db_node_domain_websiteN:3306
+      WORDPRESS_DB_USER: websiteN-wp-db-user
+      WORDPRESS_DB_PASSWORD: yourPASSWORD
+      WORDPRESS_DB_NAME: websiteN-wp-db
+    container_name: websiteN-wordpress
+volumes:
+  db_data:
+  wp_data:
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
