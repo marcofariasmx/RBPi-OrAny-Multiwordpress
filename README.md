@@ -13,7 +13,7 @@ Multiple Wordpress Websites in Docker with Let's Encrypt and Nginx-Proxy in a si
 ## Directories tree
 
 ```
-/nginx-proxy-multiwordpress
+/RBPi-OrAny-Multiwordpress
 .
 └── docker
     ├── nginx-proxy
