@@ -26,7 +26,7 @@ Multiple Wordpress Websites in Docker with Let's Encrypt and Nginx-Proxy in a si
 
 Download this repository with
 ```
-git clone http://
+git clone https://github.com/marcofariasmx/RBPi-OrAny-Multiwordpress.git
 ```
 and get easily going with docker-compose in the nginx-proxy directory and then with each wordpress website.
 
