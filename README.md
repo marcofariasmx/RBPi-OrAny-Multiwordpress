@@ -190,3 +190,5 @@ Big thanks to to the creators of all the libraries used in this project, they ar
 - [jrcs/letsencrypt-nginx-proxy-companion](JrCs/docker-letsencrypt-nginx-proxy-companion)
 
 And also special thanks to Oleg Ishenko since this tutorial is mostly based on his tutorial [Use Nginx-Proxy and LetsEncrypt Companion to Host Multiple Websites](https://www.singularaspect.com/use-nginx-proxy-and-letsencrypt-companion-to-host-multiple-websites/)
+
+Blogpost to continue this conversation: https://marcofarias.com/multiple-wordpress-websites-in-docker-with-lets-encrypt-and-nginx-proxy-in-a-single-raspberry-pi-server-or-any-server/
