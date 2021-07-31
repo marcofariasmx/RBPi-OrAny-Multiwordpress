@@ -9,6 +9,7 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./config/my_proxy.conf:/etc/nginx/conf.d/my_proxy.conf:ro
       - letsencrypt-certs:/etc/nginx/certs
       - letsencrypt-vhost-d:/etc/nginx/vhost.d
       - letsencrypt-html:/usr/share/nginx/html
