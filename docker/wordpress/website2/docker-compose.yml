@@ -13,6 +13,8 @@ services:
       MYSQL_USER: website2-wp-db-user
       MYSQL_PASSWORD: yourPASSWORD
     container_name: website2-wordpress-db
+    networks:
+      - nginx-proxy_default
 
   wordpress_website2:
     depends_on:
@@ -24,7 +26,11 @@ services:
     volumes:
       - wp_data:/var/www/html
     expose:
-      - 80
+      - 8002
+    ports:
+      - "8002:80"
+    networks:
+      - nginx-proxy_default
     restart: unless-stopped
     environment:
       VIRTUAL_HOST: website2.com, www.website2.com
@@ -39,6 +45,6 @@ volumes:
   wp_data:
 
 networks:
-  default:
-    external:
-      name: nginx-proxy
+  nginx-proxy_default:
+    external: true
+    name: nginx-proxy_default
