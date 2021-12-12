@@ -1,7 +1,7 @@
 version: "3"
 services:
   nginx-proxy:
-    image: jwilder/nginx-proxy
+    image: nginxproxy/nginx-proxy
     container_name: nginx-proxy
     restart: unless-stopped
     ports:
@@ -10,29 +10,29 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./config/my_proxy.conf:/etc/nginx/conf.d/my_proxy.conf:ro
-      - letsencrypt-certs:/etc/nginx/certs
-      - letsencrypt-vhost-d:/etc/nginx/vhost.d
-      - letsencrypt-html:/usr/share/nginx/html
-  letsencrypt-proxy:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: letsencrypt-proxy
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - letsencrypt-certs:/etc/nginx/certs
-      - letsencrypt-vhost-d:/etc/nginx/vhost.d
-      - letsencrypt-html:/usr/share/nginx/html
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - acme:/etc/acme.sh
     environment:
       - DEFAULT_EMAIL=your@email.com
       - NGINX_PROXY_CONTAINER=nginx-proxy
 
-
 networks:
-  default:
-    external:
-      name: nginx-proxy
+  nginx-proxy:
+    name: nginx-proxy
 
 volumes:
-  letsencrypt-certs:
-  letsencrypt-vhost-d:
-  letsencrypt-html:
+  certs:
+  vhost:
+  html:
+  acme:
