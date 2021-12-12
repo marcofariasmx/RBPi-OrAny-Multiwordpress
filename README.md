@@ -40,7 +40,7 @@ sudo nano nginx-proxy-multiwordpress/docker/nginx-proxy/docker-compose.yml
 version: "3"
 services:
   nginx-proxy:
-    image: jwilder/nginx-proxy
+    image: nginxproxy/nginx-proxy
     container_name: nginx-proxy
     restart: unless-stopped
     ports:
@@ -48,32 +48,34 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - letsencrypt-certs:/etc/nginx/certs
-      - letsencrypt-vhost-d:/etc/nginx/vhost.d
-      - letsencrypt-html:/usr/share/nginx/html
-  letsencrypt-proxy:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: letsencrypt-proxy
+      - ./config/my_proxy.conf:/etc/nginx/conf.d/my_proxy.conf:ro
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - letsencrypt-certs:/etc/nginx/certs
-      - letsencrypt-vhost-d:/etc/nginx/vhost.d
-      - letsencrypt-html:/usr/share/nginx/html
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - acme:/etc/acme.sh
     environment:
       - DEFAULT_EMAIL=your@email.com
       - NGINX_PROXY_CONTAINER=nginx-proxy
 
-
 networks:
-  default:
-    external:
-      name: nginx-proxy
+  nginx-proxy:
+    name: nginx-proxy
 
 volumes:
-  letsencrypt-certs:
-  letsencrypt-vhost-d:
-  letsencrypt-html:
+  certs:
+  vhost:
+  html:
+  acme:
+
 ```
 
 ### go to the nginx-proxy directory
@@ -111,6 +113,8 @@ services:
       MYSQL_USER: website1-wp-db-user
       MYSQL_PASSWORD: yourPASSWORD
     container_name: website1-wordpress-db
+    networks:
+      - nginx-proxy_default
 
   wordpress_website1:
     depends_on:
@@ -122,7 +126,11 @@ services:
     volumes:
       - wp_data:/var/www/html
     expose:
-      - 80
+      - 8001
+    ports:
+      - "8001:80"
+    networks:
+      - nginx-proxy_default
     restart: unless-stopped
     environment:
       VIRTUAL_HOST: website1.com, www.website1.com
@@ -137,9 +145,9 @@ volumes:
   wp_data:
 
 networks:
-  default:
-    external:
-      name: nginx-proxy
+  nginx-proxy_default:
+    external: true
+    name: nginx-proxy_default
 
 ```
 
